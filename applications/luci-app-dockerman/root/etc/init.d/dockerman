@@ -3,7 +3,7 @@
 START=99
 USE_PROCD=1
 # PROCD_DEBUG=1
-config_load 'dockerd'
+#config_load 'dockerd'
 # config_get daemon_ea "dockerman" daemon_ea
 _DOCKERD=/etc/init.d/dockerd
 
@@ -102,6 +102,7 @@ handle_allowed_interface(){
 }
 
 start_service(){
+	config_load 'dockerd'
 	[ -x "$_DOCKERD" ] && $($_DOCKERD enabled) || return 0
 	delete_dockerman_chain
 	$($_DOCKERD running) && docker_running || return 0
@@ -127,5 +128,9 @@ boot() {
 	start
 }
 
-extra_command "add_ports" "Add allowed ports based on the container ID(s)"
-extra_command "convert" "Convert Ac allowed container to AC allowed ports"
+#extra_command "add_ports" "Add allowed ports based on the container ID(s)"
+#extra_command "convert" "Convert Ac allowed container to AC allowed ports"
+
+EXTRA_COMMANDS="add_ports convert"
+EXTRA_HELP="	add_ports Add allowed ports based on the container ID(s)
+convert Convert Ac allowed container to AC allowed ports"
