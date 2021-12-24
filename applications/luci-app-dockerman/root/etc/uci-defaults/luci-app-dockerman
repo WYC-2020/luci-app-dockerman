@@ -23,6 +23,15 @@ uci -q batch <<-EOF >/dev/null
 
 	commit dockerd
 EOF
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@dockerd[-1]
+	add ucitrack dockerd
+	set ucitrack.@dockerd[-1].exec="/etc/init.d/dockerd restart"
+	commit ucitrack
+EOF
+
+
 # remove dockerd firewall
 config_load dockerd
 remove_firewall(){
